@@ -165,8 +165,7 @@ def measure_disparity(
         print(f'- {col} is {pct_diff:.1f} % {"higher" if higher else "lower"} among this'
         ' group than the population.\n'
         )
-
-
+    return df_fairness
 
 if __name__ == '__main__':
-  fire.Fire(measure_disparity)
+    fire.Fire(measure_disparity)
