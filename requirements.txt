@@ -11,3 +11,4 @@ tabulate
 Cython
 jupyter
 xgboost
+pyfomo

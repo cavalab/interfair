@@ -1,0 +1,16 @@
+sphinx 
+recommonmark 
+seaborn 
+nbsphinx
+matplotlib 
+jupyter
+sphinx-copybutton
+numpydoc
+m2r2
+furo
+sphinx-design
+sphinx-inline-tabs
+myst-parser
+nbsphinx
+sphinx_material
+pandoc
