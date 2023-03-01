@@ -34,6 +34,6 @@ termination = DefaultMultiObjectiveTermination(
     cvtol=1e-6,
     ftol=0.0025,
     period=30,
-    n_max_gen=1000,
+    n_max_gen=85,
     n_max_evals=100000
 )

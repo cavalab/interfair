@@ -19,3 +19,9 @@ license
 demo_measure_disparity
 demo_mitigate_disparity
 ```
+
+```{toctree}
+:caption: API
+
+api
+```

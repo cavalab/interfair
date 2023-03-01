@@ -11,6 +11,12 @@ copyright = '2023, William La Cava and Elle Lett'
 author = 'William La Cava and Elle Lett'
 release = ''
 
+# add path to sys to import functions
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+import sys
+sys.path.insert(0,os.path.abspath(os.path.join(dir_path, '..')))
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 

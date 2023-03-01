@@ -8,19 +8,25 @@ import warnings
 warnings.simplefilter('ignore')
 
 def measure_disparity(
-    dataset: str
+    dataset: str,
+    savefile: str = 'df_fairness.csv'
 ):
     """Return prediction measures of disparity with respect to groups in dataset.
 
     Parameters
     ----------
+
     dataset: str
-      A csv file storing a dataframe with one row per individual. Columns should include:
-      1. `model prediction`: Model prediction (as a probability)
-      2. `binary outcome`: Binary outcome (i.e. 0 or 1, where 1 indicates the favorable outcome for the individual being scored)
-      3. `model label`: Model label
-      4. `sample weights`: Sample weights
-      5. additional columns are demographic data on protected and reference classes
+        A csv file storing a dataframe with one row per individual. Columns should include:
+
+        1. `model prediction`: Model prediction (as a probability)
+        2. `binary outcome`: Binary outcome (i.e. 0 or 1, where 1 indicates the favorable outcome for the individual being scored)
+        3. `model label`: Model label
+        4. `sample weights`: Sample weights
+        5. additional columns are demographic data on protected and reference classes
+
+    savefile: str, default: df_fairness.csv
+        The name of the save file. 
 
     Outputs
     -------
