@@ -9,3 +9,4 @@ pmlb
 tqdm
 tabulate
 Cython
+pyfomo
