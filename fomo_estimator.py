@@ -15,7 +15,7 @@ est = FomoClassifier(
     fairness_metrics=[metrics.subgroup_FNR_scorer],
     # algorithm = NSGA2(pop_size=50),
     algorithm = NSGA3(
-        pop_size=32, 
+        pop_size=64, 
         ref_dirs = get_reference_directions(
             "uniform", 
             2, 
@@ -34,6 +34,6 @@ termination = DefaultMultiObjectiveTermination(
     cvtol=1e-6,
     ftol=0.0025,
     period=30,
-    n_max_gen=100,
+    n_max_gen=1000,
     n_max_evals=100000
 )
