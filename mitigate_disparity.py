@@ -1,5 +1,4 @@
 import pandas as pd
-from pymoo.termination.default import DefaultMultiObjectiveTermination
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
 import pickle
@@ -61,19 +60,11 @@ def mitigate_disparity(
     
     est = fomo_estimator.est
 
-    termination = DefaultMultiObjectiveTermination(
-        xtol=1e-8,
-        cvtol=1e-6,
-        ftol=0.0025,
-        period=30,
-        n_max_gen=10,
-        n_max_evals=100000
-    )
     est.fit(
         Xtrain,
         ytrain,
         protected_features=list(protected_features), 
-        termination=termination,
+        termination=fomo_estimator.termination,
         starting_point=starting_point,
         save_history=True
     )
