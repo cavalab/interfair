@@ -1,27 +1,3 @@
-"""
-“measure_disparity.py” takes in a set of model predictions and quantifies discrimination in model outcomes.
-
-1. Inputs
-
-(1)  A dataframe with one row per individual. Columns will include:
-
-(i)    Model prediction (as a probability)
-
-(ii)   Binary outcome (i.e. 0 or 1, where 1 indicates the favorable outcome for the individual being scored)
-
-(iii)   Model label
-
-(iv)  Sample weights
-
-(v)  Demographic data on protected and reference classes
-
-2. Outputs
-
-(1)  One value per protected class measuring discrimination for each metric used
-
-(2)  [Optional] graphics/visualization, useful formatted output
-"""
-
 import numpy as np
 import pandas as pd
 import fire
@@ -49,9 +25,14 @@ def measure_disparity(
     Outputs
     -------
 
-    (1)  One value per protected class measuring discrimination for each metric used
-
-    (2)  [Optional] graphics/visualization, useful formatted output
+    Overall Performance
+        Predictive biases across data. 
+    Subgroup Fairness Violations
+        Deviations in performance for marginal and intersectional groups.
+    Subgroups with largest violations
+        Identifies groups experiencing the largest percent differences in performance according to each metric.  
+    df_fairness.csv : file
+        Writes a csv file containing the fairness results.
     """
     print('reading in',dataset)
     df = pd.read_csv(dataset)
@@ -70,11 +51,11 @@ def measure_disparity(
     soft_predictive_measures = [
         sklearn_metrics.roc_auc_score,
         sklearn_metrics.average_precision_score,
-        metrics.FPR,
-        metrics.FNR,
         metrics.positivity
     ]
     hard_predictive_measures = [
+        metrics.FPR,
+        metrics.FNR,
         sklearn_metrics.accuracy_score
     ]
     social_measures = [
@@ -128,8 +109,7 @@ def measure_disparity(
             result['metric'] = nice_metrics.get(sm.__name__,sm.__name__)
             result['grouping'] = grouping
             frames.append(result)
-    # import ipdb
-    # ipdb.set_trace()
+
     df_fairness = (
         pd.concat(frames)
         .pivot(columns=['metric'], values=['signed_value'])
@@ -138,12 +118,15 @@ def measure_disparity(
     # get worst group violations
     worst_indices = {}
     for col in df_fairness.columns:
-        worst_group = df_fairness[col].argmax() 
+        if col == 'Positivity Rate':
+            worst_group = df_fairness[col].argmin() 
+        else:
+            worst_group = df_fairness[col].argmax() 
         worst_indices[col] = df_fairness.iloc[worst_group]._name
 
     df_tbl = df_fairness.round(3) #.astype(str)
     for col,idx in worst_indices.items():
-        df_tbl.loc[idx,col] = '!!'+df_tbl.loc[idx,col].astype(str)
+        df_tbl.loc[idx,col] = '**'+df_tbl.loc[idx,col].astype(str)
     print(df_tbl.reset_index().to_markdown(**md_args))
     
     # text of worst groups
@@ -165,8 +148,7 @@ def measure_disparity(
         print(f'- {col} is {pct_diff:.1f} % {"higher" if higher else "lower"} among this'
         ' group than the population.\n'
         )
-
-
+    df_fairness.to_csv('df_fairness.csv', index=False)
 
 if __name__ == '__main__':
-  fire.Fire(measure_disparity)
+    fire.Fire(measure_disparity)

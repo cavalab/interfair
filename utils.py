@@ -96,3 +96,26 @@ nice_metrics = dict(
     average_precision_score='AUPRC',
     accuracy_score='Accuracy'
 )
+
+def make_measure_dataset(est, est_name, X_in, y_in):
+    """makes a dataset for measuring disparities based on estimator and X,y data."""
+    X_nice = X_in.copy()
+    # make dataframe
+    demographics = [c for c in X_in.columns if any(g in c for g in ['ethnicity','gender','insurance'])]
+    demographics
+    import json
+    with open('data/mimic/mimic4_admissions.csv.label_encodings.json','r') as f:
+        enc = json.load(f)
+    for d in demographics:
+        print(d)
+        if d in enc.keys():
+            print(enc[d]['classes_'])
+            print(X_nice[d].unique())
+            X_nice[d] = X_nice[d].apply(lambda x: enc[d]['classes_'][x])
+    df = pd.DataFrame(X_nice[demographics])
+    df['model prediction'] = est.predict_proba(X_in)[:,1]
+    df['model label'] = est.predict(X_in)
+    df['sample weights'] = np.ones((len(X_in),))
+    df['binary outcome'] = y_in
+
+    df.to_csv(f'{est_name}_model_mimic4_admission.csv', index=False)

@@ -14,11 +14,11 @@ est = FomoClassifier(
     fairness_metrics=[metrics.subgroup_FNR_scorer],
     # algorithm = NSGA2(pop_size=50),
     algorithm = NSGA3(
-        pop_size=64, 
+        pop_size=24, 
         ref_dirs = get_reference_directions(
             "uniform", 
             2, 
-            n_partitions=20
+            n_partitions=12
         ),
         crossover=SBX(eta=30, prob=0.2)
     ),
@@ -27,3 +27,4 @@ est = FomoClassifier(
     checkpoint=True
 )
 est.n_jobs=min(64, est.algorithm.pop_size)
+# est.n_jobs=1

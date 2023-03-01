@@ -50,6 +50,6 @@ preprocessor = ColumnTransformer(
 )
 est = make_pipeline(preprocessor, base_model)
 
-# from xgboost import XGBRFClassifier 
+from xgboost import XGBRFClassifier 
 
-# est = XGBRFClassifier(n_jobs=1)
+est = XGBRFClassifier(n_jobs=1)

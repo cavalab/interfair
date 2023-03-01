@@ -1,9 +1,7 @@
 import pandas as pd
 from pymoo.termination.default import DefaultMultiObjectiveTermination
-import fomo.metrics as metrics
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
-from pymoo.operators.crossover.sbx import SBX
 import pickle
 
 # from pymoo.core.callback import Callback
@@ -39,10 +37,9 @@ def mitigate_disparity(
 
     Returns
     -------
-    est: sklearn-style Estimator
-        The fair/debiased model object, taking the form of a sklearn-style python object with the following functions accessible:
+    estimator.pkl: file containing sklearn-style Estimator
+        Saves a fair/debiased model object, taking the form of a sklearn-style python object.
 
-    (2)  [Optional] graphics/visualization, useful formatted output
     """
 
     print('dataset:',dataset)
@@ -60,17 +57,16 @@ def mitigate_disparity(
         random_state=42,
         test_size=0.5
     )
-    Xtrain,ytrain = resample(Xtrain,ytrain, n_samples=20000)
+    Xtrain,ytrain = resample(Xtrain,ytrain, n_samples=10000)
     
     est = fomo_estimator.est
-
 
     termination = DefaultMultiObjectiveTermination(
         xtol=1e-8,
         cvtol=1e-6,
         ftol=0.0025,
         period=30,
-        n_max_gen=100,
+        n_max_gen=10,
         n_max_evals=100000
     )
     est.fit(
@@ -85,7 +81,6 @@ def mitigate_disparity(
     with open( 'estimator.pkl', 'wb') as of:
         pickle.dump(est, of)
     print('done.')
-    # return est
 
 import fire    
 if __name__ == '__main__':

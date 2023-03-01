@@ -278,7 +278,13 @@ def subgroup_loss(
         )
         signed_deviation = raw_loss - base_loss
         if use_gamma:
-            gamma = len(idx) / len(X_protected)
+            # for FPR and FNR, gamma is also conditioned on the outcome probability
+            if metric=='FPR' or loss_fn == FPR: 
+                gamma = 1 - np.sum(y_true.loc[idx])/len(y_true.loc[idx])
+            elif metric=='FNR' or loss_fn == FNR: 
+                gamma = np.sum(y_true.loc[idx])/len(y_true.loc[idx])
+            else:
+                gamma = len(idx) / len(X_protected)
             signed_deviation *= gamma
         if use_weights:
             weight = weights.loc[idx].mean()
@@ -286,8 +292,6 @@ def subgroup_loss(
 
         abs_deviation = np.abs(signed_deviation)
 
-        # import ipdb
-        # ipdb.set_trace()
         if grouping=='intersectional':
             measure = {k:v for k,v in zip(groups,c)}
         else:
@@ -304,6 +308,8 @@ def subgroup_loss(
         measure['raw_value_pct'] = np.abs(raw_loss-base_loss)/base_loss*100
 
         category_losses.append(measure)
+
+    # print('max SF loss',metric,grouping,max_loss)
     df_losses = pd.DataFrame(category_losses).set_index(groups)
     return df_losses, max_loss, max_group
 
