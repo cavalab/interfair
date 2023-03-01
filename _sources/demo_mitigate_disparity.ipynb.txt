@@ -1,39 +1,52 @@
 {
  "cells": [
   {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "43e0eb1b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# add path to sys to import functions\n",
+    "import os \n",
+    "import sys\n",
+    "dir_path = os.getcwd()\n",
+    "sys.path.insert(0,os.path.abspath(os.path.join(dir_path, '..')))"
+   ]
+  },
+  {
    "cell_type": "markdown",
    "id": "969d6a34",
    "metadata": {},
    "source": [
-    "# Demo: Mitigate Disparity\n",
+    "# Mitigating Disparities\n",
     "\n",
     "This demo shows how to run the `mitigate_disparity` scripot on a development dataset. \n",
-    "In addition to providing a dataset, the user should identify protected features by providing a list of column names corresponding to demographics and/or other variables over which fairness should be sought."
+    "Below, we demonstrate how to run `mitgate_disparity.py` from the command line using a model trained to predict risk of admission to the emergency department using the freely available [MIMIC-IV repository](https://www.nature.com/articles/s41597-022-01899-x). \n",
+    "\n",
+    "## Inputs\n",
+    "\n",
+    "In addition to providing a dataset, the user should identify protected features by providing a list of column names corresponding to demographics and/or other variables over which fairness should be sought.\n",
+    "\n",
+    "### Continuous Updating\n",
+    "\n",
+    "This script may also be used to update a model with new data by passing a `starting_point` parameter. \n",
+    "This allows models to be continously updated over time as new biases arise and dataset shift occurs, without having to start from scratch. \n",
+    "Under the hood, this is done by setting `checkpoint=True` in the `FomoClassifier` object. \n",
+    "See the [Fomo docs](https://cavalab.org/fomo/) for more information on options. \n",
+    "\n",
+    "You may also [browse the API](https://cavalab.org/interfair/html/api.html) for `mitigate_disparity.py`. \n",
+    "\n",
+    "\n",
+    "Below, we run `mitigate_disparity.py` using a development dataset and specifying that we want to ensure fairness with respect to the features named ethnicity, gender, and insurance. "
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "2b5481fa",
+   "id": "919eea11",
    "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "dataset: ../data/mimic/development_dataset.train.csv\n",
-      "protected_features: ('ethnicity', 'gender', 'insurance')\n",
-      "running 64 processes\n",
-      "groups ['ethnicity', 'gender', 'insurance']\n",
-      "number of variables: 121\n",
-      "number of objectives: 2\n",
-      "Loaded Checkpoint: <pymoo.algorithms.moo.nsga3.NSGA3 object at 0x7f74b420d210>\n",
-      "checkpoint file: checkpoint.4b889672-8cbc-40a3-b6c3-71fa5738efcd.pkl\n",
-      "    77 |     4928 |     14 |  0.0510104788 |         ideal\n",
-      "    78 |     4992 |     14 |  0.000000E+00 |             f\n"
-     ]
-    }
-   ],
+   "outputs": [],
    "source": [
     "%run ../mitigate_disparity.py \\\n",
     "    --dataset ../data/mimic/development_dataset.train.csv \\\n",
@@ -43,36 +56,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
-   "id": "602170e3",
-   "metadata": {
-    "scrolled": false
-   },
-   "outputs": [
-    {
-     "ename": "ModuleNotFoundError",
-     "evalue": "No module named 'mitigate_disparity'",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
-      "Cell \u001b[0;32mIn[1], line 1\u001b[0m\n\u001b[0;32m----> 1\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01mmitigate_disparity\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m mitigate_disparity\n\u001b[1;32m      3\u001b[0m est \u001b[38;5;241m=\u001b[39m mitigate_disparity(\n\u001b[1;32m      4\u001b[0m     dataset\u001b[38;5;241m=\u001b[39m\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mdata/mimic/development_dataset.train.csv\u001b[39m\u001b[38;5;124m'\u001b[39m,\n\u001b[1;32m      5\u001b[0m     protected_features\u001b[38;5;241m=\u001b[39m[\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m     10\u001b[0m     starting_point \u001b[38;5;241m=\u001b[39m \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mcheckpoint.25e21a10-80f0-4c4c-8b26-83243e32bd2a.pkl\u001b[39m\u001b[38;5;124m'\u001b[39m\n\u001b[1;32m     11\u001b[0m )\n",
-      "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'mitigate_disparity'"
-     ]
-    }
-   ],
+   "execution_count": null,
+   "id": "026f2971",
+   "metadata": {},
+   "outputs": [],
    "source": [
-    "# from mitigate_disparity import mitigate_disparity\n",
-    "\n",
-    "# est = mitigate_disparity(\n",
-    "#     dataset='data/mimic/development_dataset.train.csv',\n",
-    "#     protected_features=[\n",
-    "#         'ethnicity',\n",
-    "#         'gender',\n",
-    "#         'insurance'\n",
-    "#     ],\n",
-    "#     starting_point = 'checkpoint.25e21a10-80f0-4c4c-8b26-83243e32bd2a.pkl'\n",
-    "# )"
+    "Calling `mitigate_disparity.py` will produce an `estimator.pkl` file that can be loaded for further analysis. \n",
+    "We demonstrate this below"
    ]
   },
   {
@@ -80,7 +70,7 @@
    "id": "74d5bbcb",
    "metadata": {},
    "source": [
-    "## Visualize final front\n",
+    "## Visualize fairness/error trade-offs\n",
     "\n",
     "Once training is done, we can view a set of candidate models. \n",
     "The red dot indicates the model that was selected. \n",
@@ -89,26 +79,34 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
-   "id": "13bf9b0f",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import dill\n",
-    "with open('checkpoint.25e21a10-80f0-4c4c-8b26-83243e32bd2a.pkl', 'rb') as f:\n",
-    "    alg = dill.load(f)\n",
-    "alg"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 2,
    "id": "4ccaf9ac",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<pymoo.visualization.scatter.Scatter at 0x7fd2e0e30f90>"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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GIZuvvlm1dbWJrVQAAAAIBUSDsR79uxRKHTiROFNTU365z//GX3vdjMdDAAAALq+hIdMTJgwQcXFxZo/f77OPvtsSdK+ffv05JNPauLEibIsS7/61a/U0tKS9GIBAACAZEs4EP/yl7/U3XffrZtvvjl6p9jtduumm27Sf/zHfygQCGjnzp367ne/m/RiAQAAgGRLeOnmY4LBoPbu3StJGjRokHw+X1IL6+pYuhkAAKBrS9nSzV/8AtXV1ZKkM88803aBGAAAAKeHhB+qq6mp0de//nUVFRVp+vTpmj59uoqKinTNNdeopqYmFTUCAAAAKZNwIJ43b54CgYDWrVunsrIylZWV6cUXX9SRI0d00003paJGAAAAIGUSHjKxe/duffDBB3I4/n+WPuecczR79mydc845SS0OAAAASLWE7xAPGjSoTRg+xuVyacCAAcmoCQAAAOg0CQfib33rW1q4cKHKy8sViUQUiURUXl6ue+65RzfeeGMKSgQAAABSJ65p1xwOhwzDiL63LKvN+2PbHA6HTNNMfpVdENOuAQAAdG1JnXZt1KhReuSRR760jWVZWrBgQUJFAgAAAOkWVyC+7777NGXKlLjaAQAAAN1JXGOIr7766rgO9vnnn3eoGAAAAKCzJTzt2po1a06674knntD8+fM7VBAAAADQmRIOxP/+7/+ugoKC6PtwOKzPPvtMDoejzXYAAACgO0g4EE+dOlWvvPJKm22maeqZZ55RHBNWAAAAAF1KwvMQHx+GpdZFOW688UY9//zzSSkKAAAA6CwJB+KT+eijj7R3795kHQ4AAADoFAkPmRg4cOAJ2+rr61VbW6sf/vCHSSkKAAAA6CwJB2Kv16uFCxdG3xuGoZycHI0aNSpmWAYAAAC6soQD8cKFC1VaWpqKWgAAAIBOl/AY4uPDcF1dndatW6eysrKkFQUAAAB0loQD8f33368zzzxT7777rhoaGjR27Fhdf/31mjBhwpcu2gEAAAB0RQkH4q1bt2r37t0aO3as1q5dq9raWpWXl2vPnj1asWJFKmoEAAAAUibhMcSZmZk644wzJEm//vWvNW/evOj7rKys5FYHAAAApFjCgbi+vl4HDhzQvn379Oc//1lPPPGEpNbV6oLBYNILBAAAAFIp4UB81113afDgwYpEIrr++uv1L//yL3rrrbd07733asSIEamoEQAA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1dFthw8fVjgcts219EUn66dYuurvuVT00YcffihJGjBgQHS/1+tVQUGB/vu//1tS1/y5RCC2sWnTpmn79u3R95ZlaceOHZoxY0a72q9fv15//etftXXrVm3dulULFy6UJG3dulUvv/yyJGnnzp1atWpVm+NWVFRIkvr165e8k0uiZPfTZ599poceeqjNZ47vg+nTp+vo0aPRHyyStG3bNp111lmnvAOfDunoo82bN58wR2xFRYUMw4gGoK4m2f00evRo+Xw+VVZWRttEIhEdPny4215LUnr6qbtdT8nuoy96+umnVVpaesLQt+LiYrnd7jbH2bZtm9xu9wkPLHYV6ein7vZ7Ltl9dOwvnl/8fguHw/rss8+id3+75M+lzp/YAl3F22+/bfXo0cP66KOPLMuyrF/96ldt5hK84IILrPvvvz/u9sd76qmnTph27dhcoMem6GloaLAuvPBCa+rUqVYkEkn6OSZDsvtp//79Vl5enrV//37LsizLNE2rtLTUGjZsmNXY2Bg9zqWXXmrdfPPNlmW19tOIESO67Nyx6eijp556ypo0aZIVDAYty7Ks6upqa8SIESfMEdqVpOJ77v7777cmTpwY7ZdVq1ZZPXr0sCoqKqJtutO1ZFnp6afudj2l6ue3aZpWYWGhtXfv3phf9/bbb7dmzZplhcNhKxwOWxdddFGXn4e4s/upu/2eS3YfhUIh69xzz7Xmzp0bnYf4scces1wul7Vt27bocbrazyUeqrOxcePGafXq1Zo7d64yMzPlcDi0YcMG5eTkSGod2P7FMT6nav9FJSUl0X/+KCkp0cUXX6yFCxdq5MiR+td//VfNmjVLmZmZOnr0qMaOHasHH3ww5qp2XUGy+6mgoEB33323vvGNb8jr9SoYDGrIkCHasGGDMjIyosdZs2aNbrvtNo0fP16hUEhXXXWVFixY0LknH6d09NH06dO1Y8cOTZ06VRkZGTp69KjmzJmjBx54oPM7IE6p+J5bsmSJFi1apHHjxqlnz57yer3asmWL+vTpE23Tna4lKT391N2up1T9/P7jH/+owYMHn/SfrZcvX657771XY8eOlSRNnDixyz10+EXp6Kfu9nsu2X3kdru1fv163XvvvRo/frxcrtao+bvf/U6jR4+OHqer/VwyLKuLr98JAAAApBBjiAEAAGBrBGIAAADYGoEYAAAAtkYgBgAAgK0RiAEAAGBrBGIAAADYGoEYAAAAtkYgBoDT0DvvvKOSkhIZhqFhw4appKSkzSsjI0NLlizRsGHDZBhGdPuoUaN00UUX6f3335ckvfTSS5owYYIMw9B5552nkpISTZgwQcOGDdOSJUvEVPYATgcszAEApzHDMPTUU0/pxhtvbLN9wIABKi8v1+rVqzVv3rxosLUsS7feeqvWrVun3bt3q2fPniovL9fZZ5+tLVu2qKSkRJK0c+dOjR49WitWrND/+T//p5PPCgCSizvEAGBDTz/9dMzthmHo5ptvVlVVlf7617+e9PMjRozQiBEjtGHDhlSVCACdhkAMADaydetW3XjjjZoyZcpJ27S0tEiS3G73lx6rpaVFhmEktT4ASAcCMQAgqrGxUcuWLdOQIUN0wQUXnLTdxo0btXv3bt10002dWB0ApIYr3QUAAFJr2bJlWr16tSTpyJEjOu+8805oc2xscENDg8477zxt2bJFWVlZbdrcdddd8vv92rdvn7KysvTmm29qzJgxKa4eAFKPQAwAp7mFCxdGH6rbunVrNBx/0datW095nEceeUQlJSWqqqrS+PHj9eyzzxKIAZwWGDIBADZSUlISMxAnoqCgQD/4wQ+0YsUKVVZWJqcwAEgjAjEAIGHXXnut8vPz9fjjj6e7FADoMAIxACBhHo9Ht956q1auXKlgMJjucgCgQwjEAHAaOrZSndT6UN2sWbNOaLNkyRItW7ZMUutQikcfffSENi+99JLmzp0rqfWhuu9+97vRfd/61rfU3NysCy64QE8++WQKzgIAOgcr1QEAAMDWuEMMAAAAWyMQAwAAwNYIxAAAALA1AjEAAABsjUAMAAAAWyMQAwAAwNYIxAAAALA1AjEAAABsjUAMAAAAWyMQAwAAwNYIxAAAALA1AjEAAABs7f8B6Hoqgn2tO8YAAAAASUVORK5CYII=\n",
+      "text/plain": [
+       "<Figure size 800x600 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
    "source": [
     "import pickle\n",
-    "with open('estimator.pkl','rb') as f:\n",
+    "with open('../estimator.pkl','rb') as f:\n",
     "    est = pickle.load(f)\n",
     "est.plot().show()"
    ]
@@ -118,12 +116,15 @@
    "id": "3c7b5ab4",
    "metadata": {},
    "source": [
-    "# save video of optimization"
+    "## save video of optimization\n",
+    "\n",
+    "We can view progress of the algorithm by stepping through the optimization history. \n",
+    "This is demonstrated below. "
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "id": "5e5c2141",
    "metadata": {},
    "outputs": [],
@@ -133,10 +134,12 @@
     "# from pyrecorder.writers.streamer import Streamer\n",
     "from pymoo.visualization.scatter import Scatter\n",
     "import matplotlib.pyplot as plt\n",
-    "with open('estimator.pkl','rb') as f:\n",
+    "\n",
+    "with open('../estimator.pkl','rb') as f:\n",
     "    est = pickle.load(f)\n",
     "# use the video writer as a resource\n",
-    "filename = \"xgb_nsga3_mlp.mp4\"\n",
+    "filename = \"xgb_nsga3_mlp_85.mp4\"\n",
+    "\n",
     "# from pyrecorder.writers.gif import GIF\n",
     "# result = alg.result()\n",
     "result = est.res_\n",
@@ -163,40 +166,199 @@
    "id": "44f51dd7",
    "metadata": {},
    "source": [
-    "# check test set performance"
+    "## check test set performance"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 1,
    "id": "4a35e0ad",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "insurance\n",
+      "['Medicaid', 'Medicare', 'Other']\n",
+      "[2 0 1]\n",
+      "ethnicity\n",
+      "['AMERICAN INDIAN/ALASKA NATIVE', 'ASIAN', 'BLACK/AFRICAN AMERICAN', 'HISPANIC/LATINO', 'WHITE']\n",
+      "[4 3 2 0 1]\n",
+      "gender\n",
+      "['F', 'M']\n",
+      "[1 0]\n"
+     ]
+    }
+   ],
    "source": [
     "from utils import make_measure_dataset\n",
     "import pandas as pd\n",
     "\n",
     "import pickle\n",
-    "with open('estimator.pkl','rb') as f:\n",
+    "with open('../estimator.pkl','rb') as f:\n",
     "    est = pickle.load(f)\n",
     "    \n",
-    "df_test = pd.read_csv('data/mimic/development_dataset.test.csv')\n",
+    "df_test = pd.read_csv('../data/mimic/development_dataset.test.csv')\n",
     "X_test = df_test.drop(columns='binary outcome')\n",
     "y_test = df_test['binary outcome']\n",
     "make_measure_dataset(est, 'fomo', X_test, y_test)"
    ]
   },
   {
+   "cell_type": "markdown",
+   "id": "02a06a4f",
+   "metadata": {},
+   "source": [
+    "## measure change in disparity measures\n",
+    "\n",
+    "Now that we have an updated model, we can check how our disparity measures have changed. \n",
+    "Below we run `measure_disparity.py` with our new results and compare the results to the old ones. "
+   ]
+  },
+  {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 24,
    "id": "1026dd49",
    "metadata": {
     "scrolled": false
    },
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "reading in ../fomo_model_mimic4_admission.csv\n",
+      "demographic columns: ['insurance', 'ethnicity', 'gender']\n",
+      "========================================\n",
+      "Overall Performance\n",
+      "========================================\n",
+      "\tMeasures of predictive bias on the whole population.\n",
+      "╭─────────┬─────────┬───────────────────┬───────┬───────┬────────────╮\n",
+      "│   AUROC │   AUPRC │   Positivity Rate │   FPR │   FNR │   Accuracy │\n",
+      "├─────────┼─────────┼───────────────────┼───────┼───────┼────────────┤\n",
+      "│   0.859 │    0.74 │             0.297 │ 0.053 │ 0.537 │      0.804 │\n",
+      "╰─────────┴─────────┴───────────────────┴───────┴───────┴────────────╯\n",
+      "========================================\n",
+      "Subgroup Fairness Violations\n",
+      "========================================\n",
+      "\tMeasures the deviation in performance for marginal and intersectional groups.\n",
+      "\tNote that these deviation are weighted by group prevalence to produce stable estimates when sample sizes are small.\n",
+      "╭─────────────┬───────────────────────────────┬──────────┬─────────────────────┬─────────┬─────────┬───────────────────╮\n",
+      "│   insurance │                     ethnicity │   gender │   Brier Score (MSE) │     FNR │     FPR │   Positivity Rate │\n",
+      "├─────────────┼───────────────────────────────┼──────────┼─────────────────────┼─────────┼─────────┼───────────────────┤\n",
+      "│         any │                           any │        F │              -0.006 │   0.003 │  -0.004 │            -0.011 │\n",
+      "│         any │                           any │        M │               0.006 │  -0.005 │   0.006 │             0.011 │\n",
+      "│         any │ AMERICAN INDIAN/ALASKA NATIVE │      any │                 0.0 │   0.014 │  -0.007 │              -0.0 │\n",
+      "│         any │                         ASIAN │      any │               0.001 │   0.017 │   0.006 │               0.0 │\n",
+      "│         any │        BLACK/AFRICAN AMERICAN │      any │              -0.013 │   0.011 │  -0.033 │          **-0.022 │\n",
+      "│         any │               HISPANIC/LATINO │      any │              -0.005 │    0.01 │  -0.035 │            -0.009 │\n",
+      "│         any │                         WHITE │      any │             **0.016 │  -0.008 │    0.02 │             0.031 │\n",
+      "│    Medicaid │                           any │      any │              -0.006 │   0.006 │   -0.03 │            -0.009 │\n",
+      "│    Medicaid │ AMERICAN INDIAN/ALASKA NATIVE │        F │                -0.0 │   0.009 │  -0.069 │              -0.0 │\n",
+      "│    Medicaid │ AMERICAN INDIAN/ALASKA NATIVE │        M │                -0.0 │    -0.0 │  -0.019 │              -0.0 │\n",
+      "│    Medicaid │                         ASIAN │        F │                -0.0 │   0.015 │  -0.001 │              -0.0 │\n",
+      "│    Medicaid │                         ASIAN │        M │                 0.0 │    0.01 │   0.012 │               0.0 │\n",
+      "│    Medicaid │        BLACK/AFRICAN AMERICAN │        F │              -0.002 │   0.008 │  -0.047 │            -0.003 │\n",
+      "│    Medicaid │        BLACK/AFRICAN AMERICAN │        M │              -0.001 │   0.005 │   -0.05 │            -0.002 │\n",
+      "│    Medicaid │               HISPANIC/LATINO │        F │              -0.001 │   0.011 │   -0.05 │            -0.002 │\n",
+      "│    Medicaid │               HISPANIC/LATINO │        M │                -0.0 │   0.021 │  -0.028 │            -0.001 │\n",
+      "│    Medicaid │                         WHITE │        F │                -0.0 │   0.006 │  -0.003 │              -0.0 │\n",
+      "│    Medicaid │                         WHITE │        M │              -0.001 │  -0.004 │   -0.01 │              -0.0 │\n",
+      "│    Medicare │                           any │      any │               0.006 │  -0.015 │   0.016 │             0.017 │\n",
+      "│    Medicare │ AMERICAN INDIAN/ALASKA NATIVE │        F │                 0.0 │   0.002 │ **0.064 │               0.0 │\n",
+      "│    Medicare │ AMERICAN INDIAN/ALASKA NATIVE │        M │                 0.0 │   0.013 │   0.018 │               0.0 │\n",
+      "│    Medicare │                         ASIAN │        F │                 0.0 │   0.019 │   0.011 │               0.0 │\n",
+      "│    Medicare │                         ASIAN │        M │                 0.0 │   0.013 │   0.015 │               0.0 │\n",
+      "│    Medicare │        BLACK/AFRICAN AMERICAN │        F │              -0.001 │   0.009 │   -0.02 │            -0.002 │\n",
+      "│    Medicare │        BLACK/AFRICAN AMERICAN │        M │              -0.001 │   0.011 │  -0.026 │            -0.001 │\n",
+      "│    Medicare │               HISPANIC/LATINO │        F │              -0.001 │  -0.002 │  -0.029 │            -0.001 │\n",
+      "│    Medicare │               HISPANIC/LATINO │        M │                -0.0 │   0.005 │  -0.023 │              -0.0 │\n",
+      "│    Medicare │                         WHITE │        F │               0.004 │  -0.022 │    0.03 │             0.011 │\n",
+      "│    Medicare │                         WHITE │        M │               0.004 │  -0.025 │   0.029 │             0.011 │\n",
+      "│       Other │                           any │      any │                -0.0 │   0.007 │  -0.002 │            -0.008 │\n",
+      "│       Other │ AMERICAN INDIAN/ALASKA NATIVE │        F │                -0.0 │   0.012 │  -0.017 │              -0.0 │\n",
+      "│       Other │ AMERICAN INDIAN/ALASKA NATIVE │        M │                 0.0 │ **0.029 │  -0.007 │               0.0 │\n",
+      "│       Other │                         ASIAN │        F │                 0.0 │   0.023 │   0.001 │              -0.0 │\n",
+      "│       Other │                         ASIAN │        M │               0.001 │   0.009 │   0.011 │               0.0 │\n",
+      "│       Other │        BLACK/AFRICAN AMERICAN │        F │              -0.006 │   0.011 │  -0.036 │             -0.01 │\n",
+      "│       Other │        BLACK/AFRICAN AMERICAN │        M │              -0.001 │   0.014 │  -0.028 │            -0.003 │\n",
+      "│       Other │               HISPANIC/LATINO │        F │              -0.002 │   0.014 │   -0.04 │            -0.004 │\n",
+      "│       Other │               HISPANIC/LATINO │        M │              -0.001 │   0.006 │  -0.025 │            -0.001 │\n",
+      "│       Other │                         WHITE │        F │               0.004 │   0.009 │   0.014 │             0.002 │\n",
+      "│       Other │                         WHITE │        M │               0.006 │  -0.005 │   0.021 │             0.008 │\n",
+      "╰─────────────┴───────────────────────────────┴──────────┴─────────────────────┴─────────┴─────────┴───────────────────╯\n",
+      "Subgroups with Largest Deviations\n",
+      "--------------------\n",
+      "Brier Score (MSE)\n",
+      "----------\n",
+      "- Subgroup: ethnicity=WHITE\n",
+      "- Brier Score (MSE) is 19.3 % higher among this group than the population.\n",
+      "\n",
+      "FNR\n",
+      "----------\n",
+      "- Subgroup: insurance=Other,ethnicity=AMERICAN INDIAN/ALASKA NATIVE,gender=M\n",
+      "- FNR is 10.9 % higher among this group than the population.\n",
+      "\n",
+      "FPR\n",
+      "----------\n",
+      "- Subgroup: insurance=Medicare,ethnicity=AMERICAN INDIAN/ALASKA NATIVE,gender=F\n",
+      "- FPR is 62.3 % higher among this group than the population.\n",
+      "\n",
+      "Positivity Rate\n",
+      "----------\n",
+      "- Subgroup: ethnicity=BLACK/AFRICAN AMERICAN\n",
+      "- Positivity Rate is 28.8 % lower among this group than the population.\n",
+      "\n",
+      "saving results to df_fairness.post.csv\n"
+     ]
+    }
+   ],
    "source": [
     "from measure_disparity import measure_disparity\n",
-    "df_fairness = measure_disparity('fomo_model_mimic4_admission.csv')"
+    "measure_disparity('../fomo_model_mimic4_admission.csv', savefile='df_fairness.post.csv')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "66efb1da",
+   "metadata": {},
+   "source": [
+    "## Improvements over Baseline Model\n",
+    "\n",
+    "If we compare with results from our baseline model in [demo_measure_disparity.ipynb](), we see that we have made a marked improvement to the maximum subgroup deviations on the test set:\n",
+    "\n",
+    "\n",
+    "### Brier Score (MSE)\n",
+    "\n",
+    "- Subgroup: ethnicity=WHITE\n",
+    "- Original: 19.9%, New: 19.3%\n",
+    "\n",
+    "### FNR\n",
+    "\n",
+    "- Original: 20.4%, New: 10.9% \n",
+    "\n",
+    "### FPR\n",
+    "\n",
+    "- Subgroup: insurance=Medicare,ethnicity=AMERICAN INDIAN/ALASKA NATIVE,gender=F\n",
+    "- FPR is 86.0 % higher among this group than the population.\n",
+    "- Original: 86.0%, New: 62.3%\n",
+    "\n",
+    "### Positivity Rate\n",
+    "\n",
+    "- Original: 44.9 %, New: 28.8% \n",
+    "\n",
+    "\n",
+    "In summary, our new model has a more equal false negative rate among groups than before, which was our goal. \n",
+    "In addition, we see reductions in the false positive rate deviations and differences in positivity rates. \n",
+    "\n",
+    "In terms of overall performance, we see a slight decrease, as we would also expect:\n",
+    "\n",
+    "- AUROC: 0.881 -> 0.859\n",
+    "- AUPRC: 0.77 -> 0.74\n",
+    "\n",
+    "\n",
+    "By using the model visualization tools above, decision makers can decide whether this model, or another within the set, is a better fit to the use case, as needed. "
    ]
   }
  ],
