@@ -154,7 +154,9 @@ def measure_disparity(
         print(f'- {col} is {pct_diff:.1f} % {"higher" if higher else "lower"} among this'
         ' group than the population.\n'
         )
-    df_fairness.reset_index().to_csv('df_fairness.csv', index=False)
+
+    print('saving results to',savefile)
+    df_fairness.reset_index().to_csv(savefile, index=False)
 
 if __name__ == '__main__':
     fire.Fire(measure_disparity)

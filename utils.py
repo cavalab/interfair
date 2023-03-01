@@ -104,7 +104,7 @@ def make_measure_dataset(est, est_name, X_in, y_in):
     demographics = [c for c in X_in.columns if any(g in c for g in ['ethnicity','gender','insurance'])]
     demographics
     import json
-    with open('data/mimic/mimic4_admissions.csv.label_encodings.json','r') as f:
+    with open('../data/mimic/mimic4_admissions.csv.label_encodings.json','r') as f:
         enc = json.load(f)
     for d in demographics:
         print(d)
