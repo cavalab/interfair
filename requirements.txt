@@ -9,3 +9,5 @@ pmlb
 tqdm
 tabulate
 Cython
+jupyter
+xgboost

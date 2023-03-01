@@ -1,23 +1,24 @@
 import pandas as pd
-
-from fomo import FomoClassifier
-from fomo.problem import LinearProblem, MLPProblem
-from pymoo.algorithms.moo.nsga2 import NSGA2
-from pymoo.algorithms.moo.nsga3 import NSGA3
-from pymoo.util.ref_dirs import get_reference_directions
+from pymoo.termination.default import DefaultMultiObjectiveTermination
 import fomo.metrics as metrics
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import make_scorer
-from base_model import est as base_estimator
 from sklearn.utils import resample
 from pymoo.operators.crossover.sbx import SBX
 import pickle
 
+# from pymoo.core.callback import Callback
+# from pymoo.problems import get_problem
+# from pymoo.optimize import minimize
+# from pymoo.visualization.pcp import PCP
+# from pyrecorder.recorder import Recorder
+# from pyrecorder.writers.streamer import Streamer
+
+import fomo_estimator
+
 def mitigate_disparity(
     dataset: str,
-    protected_features: list[str]
+    protected_features: list[str],
+    starting_point: str|None = None
 ):
     """
     “mitigate_disparity.py” takes in a model development dataset (training and test datasets) that your algorithm has not seen before and generates a new, optimally fair/debiased model that can be used to make new predictions.
@@ -25,24 +26,21 @@ def mitigate_disparity(
     Parameters
     ----------
     dataset: str
-      A csv file storing a dataframe with one row per individual. Columns should include:
-      1. `binary outcome`: Binary outcome (i.e. 0 or 1, where 1 indicates the favorable outcome for the individual being scored)
-      2. `sample weights`: Sample weights. These are ignored. 
-      3. All additional columns are treated as features/predictors.
-
+        A csv file storing a dataframe with one row per individual. 
+        Columns should include:
+        1. `binary outcome`: Binary outcome (i.e. 0 or 1, where 1 indicates the 
+        favorable outcome for the individual being scored)
+        2. `sample weights`: Sample weights. These are ignored. 
+        3. All additional columns are treated as features/predictors.
     protected_features: list[str]
         The columns of the dataset over which we wish to control for fairness.
+    starting_point : str | None
+        Optionally start from a checkpoint file with this name.
 
     Returns
     -------
-
-    (1)  The fair/debiased model object, taking the form of a sklearn-style python object with the following functions accessible:
-
-    (i)    .fit() – trains the model
-
-    (ii)   .predict() / .predict_proba() – makes predictions using new data
-
-    (iii)  .transform() – filters or modifies input data, if applicable
+    est: sklearn-style Estimator
+        The fair/debiased model object, taking the form of a sklearn-style python object with the following functions accessible:
 
     (2)  [Optional] graphics/visualization, useful formatted output
     """
@@ -62,34 +60,32 @@ def mitigate_disparity(
         random_state=42,
         test_size=0.5
     )
+    Xtrain,ytrain = resample(Xtrain,ytrain, n_samples=20000)
     
+    est = fomo_estimator.est
 
-    est = FomoClassifier(
-        estimator = base_estimator,
-        accuracy_metrics=[make_scorer(metrics.FPR)],
-        fairness_metrics=[metrics.subgroup_FNR_scorer],
-        # algorithm = NSGA2(pop_size=100),
-        algorithm = NSGA3(
-            pop_size=100, 
-            ref_dirs = get_reference_directions(
-                "uniform", 2, 
-                n_partitions=10),
-            crossover=SBX(eta=30, prob=0.2)
-        ),
-        verbose=True,
-        problem_type=LinearProblem,
-        n_jobs=8
+
+    termination = DefaultMultiObjectiveTermination(
+        xtol=1e-8,
+        cvtol=1e-6,
+        ftol=0.0025,
+        period=30,
+        n_max_gen=100,
+        n_max_evals=100000
     )
-    Xtrain,ytrain = resample(Xtrain,ytrain, n_samples=10000)
     est.fit(
         Xtrain,
         ytrain,
         protected_features=list(protected_features), 
-        termination=('n_gen',50),
+        termination=termination,
+        starting_point=starting_point,
+        save_history=True
     )
+    print('saving estimator to estimator.pkl...')
     with open( 'estimator.pkl', 'wb') as of:
         pickle.dump(est, of)
-    return est
+    print('done.')
+    # return est
 
 import fire    
 if __name__ == '__main__':

@@ -33,8 +33,6 @@ numeric_transformer = make_pipeline(
     StandardScaler()
     )
 
-# from sklearn.ensemble import RandomForestClassifier
-# est = RandomForestClassifier()
 preprocessor = ColumnTransformer(
     [
         ("num", numeric_transformer, numeric_features),
@@ -52,6 +50,6 @@ preprocessor = ColumnTransformer(
 )
 est = make_pipeline(preprocessor, base_model)
 
-# from xgboost import XGBClassifier 
+# from xgboost import XGBRFClassifier 
 
-# est = XGBClassifier(n_jobs=1)
+# est = XGBRFClassifier(n_jobs=1)
