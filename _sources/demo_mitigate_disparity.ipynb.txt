@@ -14,7 +14,7 @@
     "\n",
     "In addition to providing a dataset, the user should identify protected features by providing a list of column names corresponding to demographics and/or other variables over which fairness should be sought.\n",
     "\n",
-    "### Continuous Updating\n",
+    "## Continuous Updating\n",
     "\n",
     "This script may also be used to update a model with new data by passing a `starting_point` parameter. \n",
     "This allows models to be continously updated over time as new biases arise and dataset shift occurs, without having to start from scratch. \n",
@@ -62,17 +62,17 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 11,
+   "execution_count": 1,
    "id": "4ccaf9ac",
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<pymoo.visualization.scatter.Scatter at 0x7f516983cd10>"
+       "<pymoo.visualization.scatter.Scatter at 0x7f351266cb50>"
       ]
      },
-     "execution_count": 11,
+     "execution_count": 1,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -101,12 +101,12 @@
    "source": [
     "## check test set performance\n",
     "\n",
-    "This cell "
+    "This cell generates input for the measure_disparity script."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 2,
    "id": "4a35e0ad",
    "metadata": {},
    "outputs": [
@@ -159,11 +159,9 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 3,
    "id": "1026dd49",
-   "metadata": {
-    "scrolled": false
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -272,7 +270,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 4,
    "id": "94faa3bb",
    "metadata": {},
    "outputs": [
@@ -309,20 +307,9 @@
    ]
   },
   {
-   "cell_type": "code",
-   "execution_count": 9,
-   "id": "0625e614",
+   "cell_type": "markdown",
+   "id": "4adca8b5",
    "metadata": {},
-   "outputs": [
-    {
-     "ename": "SyntaxError",
-     "evalue": "invalid syntax (3679731366.py, line 1)",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;36m  Cell \u001b[0;32mIn[9], line 1\u001b[0;36m\u001b[0m\n\u001b[0;31m    In summary, our new model has a more equal false negative rate among groups than before, which was our goal.\u001b[0m\n\u001b[0m       ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m invalid syntax\n"
-     ]
-    }
-   ],
    "source": [
     "In summary, our new model has a more equal false negative rate among groups than before, which was our goal. \n",
     "In addition, we see reductions in the false positive rate deviations and differences in positivity rates. \n",
