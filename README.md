@@ -41,7 +41,7 @@ You can then run the following from the command line:
 python measure_disparity.py --dataset your_dataset.csv
 ```
 
-See the [Demo: Measuring Disparity](https://cavalab.org/interfair/demo_measure_disparity.html) for additional info. 
+See the [Demo: Measuring Disparity](https://github.com/cavalab/interfair/blob/main/docs/demo_measure_disparity.ipynb) for additional info. 
 
 ### Mitigating Model Disparity
 
@@ -52,7 +52,7 @@ You can then run the following from the command line:
 python mitigate_disparity.py --dataset your_dataset.csv
 ```
 
-See the [Demo: Mitigating Disparity](https://cavalab.org/interfair/demo_measure_disparity.html) for additional info. 
+See the [Demo: Mitigating Disparity](https://github.com/cavalab/interfair/blob/main/docs/demo_mitigate_disparity.ipynb) for additional info. 
 
 <!-- end basic -->
 
