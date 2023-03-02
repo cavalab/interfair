@@ -1,4 +1,4 @@
-# InterFair with FOMO: Intersectional Fairness with Fairness-Oriented MultiObjection Function Optimization (FOMO)
+# InterFair with FOMO: Intersectional Fairness with Fairness-Oriented Multiobjective Optimization (FOMO)
 
 
 
