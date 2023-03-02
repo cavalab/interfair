@@ -75,3 +75,5 @@ html_theme_options = {
 html_sidebars = {
             "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
             }
+
+nbsphinx_allow_errors = True
