@@ -2,20 +2,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
 import pickle
-
-# from pymoo.core.callback import Callback
-# from pymoo.problems import get_problem
-# from pymoo.optimize import minimize
-# from pymoo.visualization.pcp import PCP
-# from pyrecorder.recorder import Recorder
-# from pyrecorder.writers.streamer import Streamer
-
 import fomo_estimator
 
 def mitigate_disparity(
     dataset: str,
     protected_features: list[str],
-    starting_point: str|None = None
+    starting_point: str|None = None,
+    save_file: str = 'estimator.pkl'
 ):
     """
     “mitigate_disparity.py” takes in a model development dataset (training and test datasets) that your algorithm has not seen before and generates a new, optimally fair/debiased model that can be used to make new predictions.
@@ -33,6 +26,8 @@ def mitigate_disparity(
         The columns of the dataset over which we wish to control for fairness.
     starting_point : str | None
         Optionally start from a checkpoint file with this name.
+    save_file: str, default: estimator.pkl
+        The name of the saved estimator. 
 
     Returns
     -------
@@ -50,26 +45,19 @@ def mitigate_disparity(
                 errors='ignore'
                 )
     y = df['binary outcome']
-    Xtrain,Xtest, ytrain,ytest = train_test_split(
-        X,y,
-        stratify=y,
-        random_state=42,
-        test_size=0.5
-    )
-    Xtrain,ytrain = resample(Xtrain,ytrain, n_samples=10000)
-    
     est = fomo_estimator.est
 
     est.fit(
-        Xtrain,
-        ytrain,
+        X,
+        y,
         protected_features=list(protected_features), 
         termination=fomo_estimator.termination,
         starting_point=starting_point,
-        save_history=True
+        save_history=True,
+        checkpoint=True
     )
-    print('saving estimator to estimator.pkl...')
-    with open( 'estimator.pkl', 'wb') as of:
+    print('saving estimator to',save_file,'...')
+    with open(save_file, 'wb') as of:
         pickle.dump(est, of)
     print('done.')
 
