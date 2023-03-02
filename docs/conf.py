@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Interfair with Fomo'
+project = 'Interfair'
 copyright = '2023, William La Cava and Elle Lett'
 author = 'William La Cava and Elle Lett'
 release = ''
