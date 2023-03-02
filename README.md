@@ -1,4 +1,4 @@
-# InterFair with FOMO: Intersectional Fairness with Fairness-Oriented MultiObjection Function Optimization (FOMO)
+# InterFair with FOMO: Intersectional Fairness with Fairness-Oriented Multiobjective Optimization (FOMO)
 
 
 
@@ -18,11 +18,6 @@ FOMO allows any interested healthcare entity (a hospital system, insurance payor
 In this repository we provide two scripts that use Fomo to measure bias (`measure_disparity.py`) and correct for it (`mitigate_disparity.py`). 
 We also provide a demonstration that uses these scripts to measure and mitigate bias in models that predict risk of emergency department admission. 
 Our demonstration is based on the recently released [MIMIC-IV electronic health record dataset](https://www.nature.com/articles/s41597-022-01899-x). 
-
-### Repository structure:
-
-- `measure_disparity.py`: 
-- `mitigate_disparity.py`: 
 
 <!-- end summary -->
 
@@ -46,7 +41,7 @@ You can then run the following from the command line:
 python measure_disparity.py --dataset your_dataset.csv
 ```
 
-See the (Demo: Measuring Disparity)[demo_measure_disparity] for additional info. 
+See the [Demo: Measuring Disparity](https://cavalab.org/interfair/demo_measure_disparity.html) for additional info. 
 
 ### Mitigating Model Disparity
 
@@ -57,7 +52,7 @@ You can then run the following from the command line:
 python mitigate_disparity.py --dataset your_dataset.csv
 ```
 
-See the (Demo: Mitigating Disparity)[demo_mitigate_disparity] for additional info. 
+See the [Demo: Mitigating Disparity](https://cavalab.org/interfair/demo_measure_disparity.html) for additional info. 
 
 <!-- end basic -->
 
@@ -65,7 +60,7 @@ See the (Demo: Mitigating Disparity)[demo_mitigate_disparity] for additional inf
 
 <!-- start license -->
 
-Fomo is licensed under GNU Public License v. 3.0.  See [LICENSE](https://github.com/cavalab/fomo/blob/main/LICENSE).
+Interfair is licensed under BSD 3.  See [LICENSE](https://github.com/cavalab/fomo/blob/main/LICENSE).
 
 <!-- end license -->
 

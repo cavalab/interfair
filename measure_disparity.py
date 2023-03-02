@@ -9,7 +9,7 @@ warnings.simplefilter('ignore')
 
 def measure_disparity(
     dataset: str,
-    savefile: str = 'df_fairness.csv'
+    save_file: str = 'df_fairness.csv'
 ):
     """Return prediction measures of disparity with respect to groups in dataset.
 
@@ -25,7 +25,7 @@ def measure_disparity(
         4. `sample weights`: Sample weights
         5. additional columns are demographic data on protected and reference classes
 
-    savefile: str, default: df_fairness.csv
+    save_file: str, default: df_fairness.csv
         The name of the save file. 
 
     Outputs
@@ -37,7 +37,7 @@ def measure_disparity(
         Deviations in performance for marginal and intersectional groups.
     Subgroups with largest violations
         Identifies groups experiencing the largest percent differences in performance according to each metric.  
-    df_fairness.csv : file
+    save_file: str, default df_fairness.csv
         Writes a csv file containing the fairness results.
     """
     print('reading in',dataset)
@@ -155,8 +155,8 @@ def measure_disparity(
         ' group than the population.\n'
         )
 
-    print('saving results to',savefile)
-    df_fairness.reset_index().to_csv(savefile, index=False)
+    print('saving results to',save_file)
+    df_fairness.reset_index().to_csv(save_file, index=False)
 
 if __name__ == '__main__':
     fire.Fire(measure_disparity)
