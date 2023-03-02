@@ -19,11 +19,6 @@ In this repository we provide two scripts that use Fomo to measure bias (`measur
 We also provide a demonstration that uses these scripts to measure and mitigate bias in models that predict risk of emergency department admission. 
 Our demonstration is based on the recently released [MIMIC-IV electronic health record dataset](https://www.nature.com/articles/s41597-022-01899-x). 
 
-### Repository structure:
-
-- `measure_disparity.py`: 
-- `mitigate_disparity.py`: 
-
 <!-- end summary -->
 
 ## Basic Usage
