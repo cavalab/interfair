@@ -10,7 +10,7 @@
 
 <div class=viewcode-block  id=measure_disparity ><a class=viewcode-back  href="../api.html#measure_disparity.measure_disparity">[docs]</a><span class=k >def</span> <span class=nf >measure_disparity</span><span class=p >(</span>
     <span class=n >dataset</span><span class=p >:</span> <span class=nb >str</span><span class=p >,</span>
-    <span class=n >savefile</span><span class=p >:</span> <span class=nb >str</span> <span class=o >=</span> <span class=s1 >'df_fairness.csv'</span>
+    <span class=n >save_file</span><span class=p >:</span> <span class=nb >str</span> <span class=o >=</span> <span class=s1 >'df_fairness.csv'</span>
 <span class=p >):</span>
 <span class=w >    </span><span class=sd >"""Return prediction measures of disparity with respect to groups in dataset.</span>
 
@@ -26,7 +26,7 @@
 <span class=sd >        4. `sample weights`: Sample weights</span>
 <span class=sd >        5. additional columns are demographic data on protected and reference classes</span>
 
-<span class=sd >    savefile: str, default: df_fairness.csv</span>
+<span class=sd >    save_file: str, default: df_fairness.csv</span>
 <span class=sd >        The name of the save file. </span>
 
 <span class=sd >    Outputs</span>
@@ -38,7 +38,7 @@
 <span class=sd >        Deviations in performance for marginal and intersectional groups.</span>
 <span class=sd >    Subgroups with largest violations</span>
 <span class=sd >        Identifies groups experiencing the largest percent differences in performance according to each metric.  </span>
-<span class=sd >    df_fairness.csv : file</span>
+<span class=sd >    save_file: str, default df_fairness.csv</span>
 <span class=sd >        Writes a csv file containing the fairness results.</span>
 <span class=sd >    """</span>
     <span class=nb >print</span><span class=p >(</span><span class=s1 >'reading in'</span><span class=p >,</span><span class=n >dataset</span><span class=p >)</span>
@@ -156,8 +156,8 @@
         <span class=s1 >' group than the population.</span><span class=se >\n</span><span class=s1 >'</span>
         <span class=p >)</span>
 
-    <span class=nb >print</span><span class=p >(</span><span class=s1 >'saving results to'</span><span class=p >,</span><span class=n >savefile</span><span class=p >)</span>
-    <span class=n >df_fairness</span><span class=o >.</span><span class=n >reset_index</span><span class=p >()</span><span class=o >.</span><span class=n >to_csv</span><span class=p >(</span><span class=n >savefile</span><span class=p >,</span> <span class=n >index</span><span class=o >=</span><span class=kc >False</span><span class=p >)</span></div>
+    <span class=nb >print</span><span class=p >(</span><span class=s1 >'saving results to'</span><span class=p >,</span><span class=n >save_file</span><span class=p >)</span>
+    <span class=n >df_fairness</span><span class=o >.</span><span class=n >reset_index</span><span class=p >()</span><span class=o >.</span><span class=n >to_csv</span><span class=p >(</span><span class=n >save_file</span><span class=p >,</span> <span class=n >index</span><span class=o >=</span><span class=kc >False</span><span class=p >)</span></div>
 
 <span class=k >if</span> <span class=vm >__name__</span> <span class=o >==</span> <span class=s1 >'__main__'</span><span class=p >:</span>
     <span class=n >fire</span><span class=o >.</span><span class=n >Fire</span><span class=p >(</span><span class=n >measure_disparity</span><span class=p >)</span>

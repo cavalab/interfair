@@ -3,20 +3,13 @@
 <span class=kn >from</span> <span class=nn >sklearn.model_selection</span> <span class=kn >import</span> <span class=n >train_test_split</span>
 <span class=kn >from</span> <span class=nn >sklearn.utils</span> <span class=kn >import</span> <span class=n >resample</span>
 <span class=kn >import</span> <span class=nn >pickle</span>
-
-<span class=c1 ># from pymoo.core.callback import Callback</span>
-<span class=c1 ># from pymoo.problems import get_problem</span>
-<span class=c1 ># from pymoo.optimize import minimize</span>
-<span class=c1 ># from pymoo.visualization.pcp import PCP</span>
-<span class=c1 ># from pyrecorder.recorder import Recorder</span>
-<span class=c1 ># from pyrecorder.writers.streamer import Streamer</span>
-
 <span class=kn >import</span> <span class=nn >fomo_estimator</span>
 
 <div class=viewcode-block  id=mitigate_disparity ><a class=viewcode-back  href="../api.html#mitigate_disparity.mitigate_disparity">[docs]</a><span class=k >def</span> <span class=nf >mitigate_disparity</span><span class=p >(</span>
     <span class=n >dataset</span><span class=p >:</span> <span class=nb >str</span><span class=p >,</span>
     <span class=n >protected_features</span><span class=p >:</span> <span class=nb >list</span><span class=p >[</span><span class=nb >str</span><span class=p >],</span>
-    <span class=n >starting_point</span><span class=p >:</span> <span class=nb >str</span><span class=o >|</span><span class=kc >None</span> <span class=o >=</span> <span class=kc >None</span>
+    <span class=n >starting_point</span><span class=p >:</span> <span class=nb >str</span><span class=o >|</span><span class=kc >None</span> <span class=o >=</span> <span class=kc >None</span><span class=p >,</span>
+    <span class=n >save_file</span><span class=p >:</span> <span class=nb >str</span> <span class=o >=</span> <span class=s1 >'estimator.pkl'</span>
 <span class=p >):</span>
 <span class=w >    </span><span class=sd >"""</span>
 <span class=sd >    “mitigate_disparity.py” takes in a model development dataset (training and test datasets) that your algorithm has not seen before and generates a new, optimally fair/debiased model that can be used to make new predictions.</span>
@@ -34,6 +27,8 @@
 <span class=sd >        The columns of the dataset over which we wish to control for fairness.</span>
 <span class=sd >    starting_point : str | None</span>
 <span class=sd >        Optionally start from a checkpoint file with this name.</span>
+<span class=sd >    save_file: str, default: estimator.pkl</span>
+<span class=sd >        The name of the saved estimator. </span>
 
 <span class=sd >    Returns</span>
 <span class=sd >    -------</span>
@@ -51,26 +46,19 @@
                 <span class=n >errors</span><span class=o >=</span><span class=s1 >'ignore'</span>
                 <span class=p >)</span>
     <span class=n >y</span> <span class=o >=</span> <span class=n >df</span><span class=p >[</span><span class=s1 >'binary outcome'</span><span class=p >]</span>
-    <span class=n >Xtrain</span><span class=p >,</span><span class=n >Xtest</span><span class=p >,</span> <span class=n >ytrain</span><span class=p >,</span><span class=n >ytest</span> <span class=o >=</span> <span class=n >train_test_split</span><span class=p >(</span>
-        <span class=n >X</span><span class=p >,</span><span class=n >y</span><span class=p >,</span>
-        <span class=n >stratify</span><span class=o >=</span><span class=n >y</span><span class=p >,</span>
-        <span class=n >random_state</span><span class=o >=</span><span class=mi >42</span><span class=p >,</span>
-        <span class=n >test_size</span><span class=o >=</span><span class=mf >0.5</span>
-    <span class=p >)</span>
-    <span class=n >Xtrain</span><span class=p >,</span><span class=n >ytrain</span> <span class=o >=</span> <span class=n >resample</span><span class=p >(</span><span class=n >Xtrain</span><span class=p >,</span><span class=n >ytrain</span><span class=p >,</span> <span class=n >n_samples</span><span class=o >=</span><span class=mi >10000</span><span class=p >)</span>
-    
     <span class=n >est</span> <span class=o >=</span> <span class=n >fomo_estimator</span><span class=o >.</span><span class=n >est</span>
 
     <span class=n >est</span><span class=o >.</span><span class=n >fit</span><span class=p >(</span>
-        <span class=n >Xtrain</span><span class=p >,</span>
-        <span class=n >ytrain</span><span class=p >,</span>
+        <span class=n >X</span><span class=p >,</span>
+        <span class=n >y</span><span class=p >,</span>
         <span class=n >protected_features</span><span class=o >=</span><span class=nb >list</span><span class=p >(</span><span class=n >protected_features</span><span class=p >),</span> 
         <span class=n >termination</span><span class=o >=</span><span class=n >fomo_estimator</span><span class=o >.</span><span class=n >termination</span><span class=p >,</span>
         <span class=n >starting_point</span><span class=o >=</span><span class=n >starting_point</span><span class=p >,</span>
-        <span class=n >save_history</span><span class=o >=</span><span class=kc >True</span>
+        <span class=n >save_history</span><span class=o >=</span><span class=kc >True</span><span class=p >,</span>
+        <span class=n >checkpoint</span><span class=o >=</span><span class=kc >True</span>
     <span class=p >)</span>
-    <span class=nb >print</span><span class=p >(</span><span class=s1 >'saving estimator to estimator.pkl...'</span><span class=p >)</span>
-    <span class=k >with</span> <span class=nb >open</span><span class=p >(</span> <span class=s1 >'estimator.pkl'</span><span class=p >,</span> <span class=s1 >'wb'</span><span class=p >)</span> <span class=k >as</span> <span class=n >of</span><span class=p >:</span>
+    <span class=nb >print</span><span class=p >(</span><span class=s1 >'saving estimator to'</span><span class=p >,</span><span class=n >save_file</span><span class=p >,</span><span class=s1 >'...'</span><span class=p >)</span>
+    <span class=k >with</span> <span class=nb >open</span><span class=p >(</span><span class=n >save_file</span><span class=p >,</span> <span class=s1 >'wb'</span><span class=p >)</span> <span class=k >as</span> <span class=n >of</span><span class=p >:</span>
         <span class=n >pickle</span><span class=o >.</span><span class=n >dump</span><span class=p >(</span><span class=n >est</span><span class=p >,</span> <span class=n >of</span><span class=p >)</span>
     <span class=nb >print</span><span class=p >(</span><span class=s1 >'done.'</span><span class=p >)</span></div>
 
