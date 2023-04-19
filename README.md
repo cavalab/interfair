@@ -68,7 +68,7 @@ Interfair is licensed under BSD 3.  See [LICENSE](https://github.com/cavalab/fom
 
 <!-- start contact -->
 
-Team: Willam La Cava and Elle Lett
+Team: [Willam La Cava](https://williamlacava.com) and [Elle Lett](https://ellelett.com)
 
 Team Lead Contact: williamlacava@gmail.com
 
