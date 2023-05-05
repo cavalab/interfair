@@ -1,39 +1,39 @@
-name: docs
-on: [push, pull_request]
+# name: docs
+# on: [push, pull_request]
 
-env: 
-  CACHE_NUMBER: 0
+# env: 
+#   CACHE_NUMBER: 0
 
-jobs:
-  docs:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    steps:
-      - 
-        name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 30
-      - 
-        name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
-        with:
-          environment-file: environment.yml
-          cache-env: true
-      - 
-        name: Install
-        run: | 
-          micromamba env list
-          pip install -r requirements.txt
-          cd docs
-          pip install -r requirements.txt
-          make html 
-      - 
-        name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site/html
+# jobs:
+#   docs:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash -l {0}
+#     steps:
+#       - 
+#         name: Checkout code
+#         uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 30
+#       - 
+#         name: Install Conda environment with Micromamba
+#         uses: mamba-org/provision-with-micromamba@main
+#         with:
+#           environment-file: environment.yml
+#           cache-env: true
+#       - 
+#         name: Install
+#         run: | 
+#           micromamba env list
+#           pip install -r requirements.txt
+#           cd docs
+#           pip install -r requirements.txt
+#           make html 
+#       - 
+#         name: Deploy
+#         uses: peaceiris/actions-gh-pages@v3
+#         if: ${{ github.ref == 'refs/heads/main' }}
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./_site/html
