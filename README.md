@@ -71,4 +71,6 @@ Team: [Willam La Cava](https://williamlacava.com) and [Elle Lett](https://ellele
 
 Team Lead Contact: williamlacava@gmail.com
 
+When they are not competing in hackathons, William and Elle can be found conducting research at the [Cava lab](https://cavalab.org), part of the [Computational Health Informatics Program](https://chip.org) at Boston Children's Hospital.
+
 <!-- end contact -->
