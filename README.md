@@ -7,7 +7,7 @@
 <!-- start summary -->
 
 
-*InterFair* is our Bias Detection Tool Entry for the [#ExpeditionHacks competition on bias in healthcare](https://expeditionhacks.com/bias-detection-healthcare/). 
+*InterFair* is a Bias Detection Tool that won the [#ExpeditionHacks competition on bias in healthcare](https://expeditionhacks.com/bias-detection-healthcare/). 
 Our entry uses a new fair machine learning framework called **F**airness **Oriented** Multiobjective **O**ptimization, or [Fomo](https://cavalab.org/fomo). 
 Interfair allows any interested healthcare entity (a hospital system, insurance payor, or individual clinic) to feed in an ML model for a given prediction task, measure its performance across intersectional groups of patients, and optimize it with respect to several flexible fairness constraints.
 
